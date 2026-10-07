@@ -1,0 +1,26 @@
+overall I don't like the look of the app; the dashboard, the fields, the buttons, the placements, the relevance of font size and weights to each other and also the font family. almost nothing about it. the design can change as much as I am concerned. and what I say for dashboard, I don't mean for just it, I want it applied anywhere possible and relevant.
+
+for 5)
+the icons have gathered at top; in collapse I want them at the middle.
+I want the collapse expand button at the top instead of orange square.
+menu must be collapsed at login.
+sign out and preferences to be at the bottom, whether in collapse mode or expanded mode.
+a new ask: I want two other palletes added: one with the color of 5, the other with color of 4.
+
+for 3)
+3 is not as orange as you made the project. it is top edge ambient orange (which should change depending on pallete) on a grey background.
+yes I want almost all transitions and animations slower. nothing in all of app should transition fast. I like the spaeed of 3.
+whereever we can use pop-ups, I want them; like in this; a little transparent and blurry enough.
+a new ask: also a new mouse look almost like 3 I want and also its behaviour that when clicked it gets smaller and then gets back to its size.
+
+for 4)
+here is what I mean for dashboard and page change and data style; it happens slowly and there are animations and transitions that are slower than ours. things either get smaller, or collapse or go out of view in order for the new page to take its place.
+I liked this you said, it is complementory to my idea: "nowhere near the reference's morph/cross-dissolve between views, and not a real route-to-route transition yet." 
+
+for 1)
+continue for it as long as it doesn't conflict with my other ideas.
+
+for 2)
+from two let me rephrase it myself what I want: glassmorphism. I want a bar to be able to change the percentage of transparency in alright range (you decide the range) so something blackish behind the blurry-surface in dark mode and something whitish in light mode. I don't want moving background behind it.
+you can forget this one: https://dribbble.com/shots/26135144-Fintech-Dashboard-UI-UX-Design-for-Borea-AI. expect for the pop up which I told you in 3 anyway.
+your ideas: selective frosted glass (bright frosted top bar → smoked card → nested toolbar → bright popover), heavy backdrop-blur, semi-transparent tinted surfaces with the background bleeding through, bright hairline borders, one opaque accent — all lit by a vivid animated gradient/ribbon (Borea) or a soft blurred gradient with a top light source.  >>> I didn't understand them but if they are not contradictory to what I want, do them.

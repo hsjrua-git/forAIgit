@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<script type="application/json" id="cowork-artifact-meta">
+{
+  "name": "Student Panel Er",
+  "schemaVersion": 1,
+  "description": "ER diagram of the Student Panel database: current tables plus the proposed changes from the user's notes (student↔user link, teacher-student ownership, parameter assignments, tasks, per-student periods, user custom fields, audit soft-delete). New tables/columns marked in green."
+}
+</script>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Student Panel — proposed database (ER diagram)</title>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11.15.0/dist/mermaid.min.js" integrity="sha384-yQ4mmBBT+vhTAwjFH0toJXNYJ6O4usWnt6EPIdWwrRvx2V/n5lXuDZQwQFeSFydF" crossorigin="anonymous"></script>
+<style>
+  :root { color-scheme: light; }
+  body {
+    margin: 0; padding: 24px 20px 60px;
+    background: #f7f8fb; color: #1c2130;
+    font: 15px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  }
+  .wrap { max-width: 1100px; margin: 0 auto; }
+  h1 { font-size: 22px; margin: 0 0 4px; }
+  .sub { color: #5b6478; margin: 0 0 20px; }
+  .legend { display: flex; flex-wrap: wrap; gap: 16px; margin: 0 0 18px; font-size: 13px; }
+  .legend span { display: inline-flex; align-items: center; gap: 7px; }
+  .dot { width: 13px; height: 13px; border-radius: 3px; border: 1px solid rgba(0,0,0,.15); }
+  .dot.exist { background: #e8edf6; }
+  .dot.new { background: #d8f3e3; }
+  .card {
+    background: #fff; border: 1px solid #e3e7ef; border-radius: 12px;
+    padding: 16px; box-shadow: 0 1px 3px rgba(20,30,60,.05);
+    overflow-x: auto;
+  }
+  .mermaid { text-align: center; }
+  .note { font-size: 13px; color: #5b6478; margin-top: 14px; }
+  h2 { font-size: 15px; margin: 26px 0 8px; }
+  ul { margin: 6px 0 0; padding-left: 20px; }
+  li { margin: 3px 0; }
+  code { background: #eef1f7; padding: 1px 5px; border-radius: 4px; font-size: 13px; }
+  .new-tag { color: #0f7a45; font-weight: 600; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Student Panel — proposed database</h1>
+  <p class="sub">What exists today plus the changes from your notes. Green = brand new.</p>
+  <div class="legend">
+    <span><i class="dot exist"></i> Already in the database today</span>
+    <span><i class="dot new"></i> New table or new column to add</span>
+  </div>
+  <div class="card">
+<pre class="mermaid">
+erDiagram
+  ROLES ||--o{ USERS : "given to"
+  ROLES ||--o{ ROLE_PERMISSIONS : holds
+  USERS |o--o| STUDENTS : "can also be a"
+  USERS ||--o{ TEACHER_STUDENTS : teaches
+  STUDENTS ||--o{ TEACHER_STUDENTS : "taught by"
+  STUDENTS ||--o{ EVALUATIONS : receives
+  PARAMETERS ||--o{ EVALUATIONS : "measured by"
+  PARAMETERS ||--o{ PARAMETER_CHANGES : "history of"
+  STUDENT_GROUPS ||--o{ STUDENT_GROUPS : "parent of"
+  STUDENTS ||--o{ STUDENT_GROUP_MEMBERS : "placed via"
+  STUDENT_GROUPS ||--o{ STUDENT_GROUP_MEMBERS : "contains via"
+  PARAMETERS ||--o{ PARAMETER_ASSIGNMENTS : "given out via"
+  STUDENT_GROUPS ||--o{ PARAMETER_ASSIGNMENTS : "target of"
+  STUDENTS ||--o{ PARAMETER_ASSIGNMENTS : "target of"
+  TASKS ||--o{ TASK_ASSIGNMENTS : "given out via"
+  PARAMETERS |o--o{ TASKS : "optionally about"
+  STUDENT_GROUPS ||--o{ TASK_ASSIGNMENTS : "target of"
+  STUDENTS ||--o{ TASK_ASSIGNMENTS : "target of"
+  USERS ||--o{ AUDIT_LOG : "acts in"
+  USER_FIELD_DEFINITIONS ||--o{ USERS : "describes extra of"
+
+  ROLES {
+    uuid id PK
+    text name
+    boolean is_system
+  }
+  USERS {
+    uuid id PK
+    text username
+    uuid role_id FK
+    timestamp created_at
+    jsonb extra "NEW custom user fields"
+  }
+  STUDENTS {
+    uuid id PK
+    text full_name
+    jsonb extra
+    uuid user_id FK "NEW link to login"
+    text period_interval "NEW e.g. 1w / 2w / 1m / 3d"
+    date period_anchor "NEW start date"
+  }
+  TEACHER_STUDENTS {
+    uuid teacher_user_id FK "NEW"
+    uuid student_id FK "NEW"
+  }
+  PARAMETERS {
+    uuid id PK
+    text name
+    numeric min_value
+    numeric max_value
+  }
+  EVALUATIONS {
+    uuid id PK
+    uuid student_id FK
+    uuid parameter_id FK
+    int period_number
+    numeric value
+    timestamp locks_at
+    text comment
+  }
+  PARAMETER_ASSIGNMENTS {
+    uuid id PK "NEW"
+    uuid parameter_id FK "NEW"
+    uuid group_id FK "NEW nullable"
+    uuid student_id FK "NEW nullable"
+  }
+  TASKS {
+    uuid id PK "NEW"
+    text title "NEW"
+    uuid parameter_id FK "NEW nullable"
+  }
+  TASK_ASSIGNMENTS {
+    uuid id PK "NEW"
+    uuid task_id FK "NEW"
+    uuid group_id FK "NEW nullable"
+    uuid student_id FK "NEW nullable"
+  }
+  STUDENT_GROUPS {
+    uuid id PK
+    text name
+    uuid parent_id FK
+  }
+  STUDENT_GROUP_MEMBERS {
+    uuid student_id FK
+    uuid group_id FK
+  }
+  USER_FIELD_DEFINITIONS {
+    uuid id PK "NEW"
+    text label "NEW"
+    boolean is_restricted "NEW"
+  }
+  AUDIT_LOG {
+    bigint id PK
+    text action
+    timestamp occurred_at
+    timestamp deleted_at "NEW soft-delete"
+    text delete_reason "NEW required to delete"
+  }
+</pre>
+  </div>
+  <p class="note">Plumbing tables that don't change (<code>role_permissions</code>, <code>user_sessions</code>, <code>user_preferences</code>, <code>saved_views</code>, <code>settings</code>, <code>student_field_definitions</code>) are left out of the picture to keep it readable.</p>
+
+  <h2>New tables at a glance</h2>
+  <ul>
+    <li><span class="new-tag">TEACHER_STUDENTS</span> — which teacher is responsible for which student (so a teacher sees "their" students only).</li>
+    <li><span class="new-tag">PARAMETER_ASSIGNMENTS</span> — which parameters apply to which group or student (parameters stop being global).</li>
+    <li><span class="new-tag">TASKS</span> + <span class="new-tag">TASK_ASSIGNMENTS</span> — a brand-new "task" idea, handed out to groups/students, optionally tied to a parameter.</li>
+    <li><span class="new-tag">USER_FIELD_DEFINITIONS</span> — custom fields on user accounts (mirrors the custom fields you already have on students).</li>
+  </ul>
+  <h2>New columns on tables you already have</h2>
+  <ul>
+    <li><code>students.user_id</code> — links an evaluated student to their own login account.</li>
+    <li><code>students.period_interval</code> + <code>students.period_anchor</code> — each student's own class rhythm (weekly, every 3 days, monthly…).</li>
+    <li><code>users.extra</code> — storage for the custom user fields.</li>
+    <li><code>audit_log.deleted_at</code> + <code>audit_log.delete_reason</code> — lets a log entry be removed only with a written reason.</li>
+  </ul>
+</div>
+</body>
+</html>

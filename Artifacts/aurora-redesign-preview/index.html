@@ -1,0 +1,473 @@
+<!doctype html>
+<script type="application/json" id="cowork-artifact-meta">
+{
+  "name": "Aurora Redesign Preview",
+  "schemaVersion": 1,
+  "description": "Static preview harness for the Student Panel \"Aurora\" redesign. Mirrors the real index.css tokens so the new look can be reviewed without running the app: live Light/Dark toggle and all five palettes (Aurora default, Gradebook, Midnight, Ember, Meadow), plus glass surfaces, the aurora page wash, KPI cards with the entrance stagger + hover lift, gradient-fill charts, the dark sidebar with brand glow, buttons/tabs/pills, and the new glass sign-in card. No connectors — purely presentational."
+}
+</script>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Student Panel — Aurora redesign preview</title>
+    <style>
+      /* ==========================================================
+         Aurora preview harness — mirrors client/src/index.css tokens
+         so the redesign can be reviewed without running the app.
+         Theme (light/dark) + palette are switched via data-* on <html>.
+         ========================================================== */
+
+      :root {
+        color-scheme: light;
+        --paper: #eceefb;
+        --surface: #ffffff;
+        --surface-2: #eef0fb;
+        --surface-3: #e3e6f7;
+        --ink: #1a1c2e;
+        --ink-soft: #545879;
+        --ink-faint: #656a8c;
+        --line: #e4e6f5;
+        --line-strong: #ccd0ea;
+        --brand: #5850ec;
+        --brand-strong: #453ecb;
+        --brand-ink: #ffffff;
+        --brand-soft: #e9e8fd;
+        --brand-2: #4f8ff5;
+        --ok: #1f9d63;
+        --ok-soft: #e4f5ec;
+        --danger: #d5443a;
+        --danger-soft: #fbe8e6;
+        --warn: #b8790a;
+        --warn-soft: #fbefd3;
+        --sidebar-bg: #141329;
+        --sidebar-edge: #262147;
+        --sidebar-ink: #d7d8ee;
+        --sidebar-ink-soft: #8b8cb5;
+        --sidebar-hover: rgba(255, 255, 255, 0.06);
+        --sidebar-active-bg: rgba(123, 116, 246, 0.2);
+        --sidebar-active-ink: #ffffff;
+        --sidebar-active-bar: #8b8cff;
+        --radius: 10px;
+        --radius-sm: 6px;
+        --shadow-sm: 0 1px 2px rgba(18, 20, 45, 0.06);
+        --shadow-md: 0 8px 24px -10px rgba(38, 33, 90, 0.28);
+        --shadow-pop: 0 18px 44px -14px rgba(30, 26, 80, 0.4);
+        --glass-bg: color-mix(in srgb, var(--surface) 82%, transparent);
+        --glass-blur: saturate(1.3) blur(14px);
+        --glass-border: color-mix(in srgb, var(--line) 65%, transparent);
+        --glow-1: color-mix(in srgb, var(--brand) 9%, transparent);
+        --glow-2: color-mix(in srgb, var(--brand-2, var(--brand)) 8%, transparent);
+        --t: 180ms;
+        --ease: cubic-bezier(0.2, 0.7, 0.3, 1);
+        font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        line-height: 1.55;
+      }
+
+      :root[data-theme="dark"] {
+        color-scheme: dark;
+        --paper: #0a0a17;
+        --surface: #14152b;
+        --surface-2: #1b1c38;
+        --surface-3: #262747;
+        --ink: #e9eaf6;
+        --ink-soft: #a9adce;
+        --ink-faint: #878bb4;
+        --line: #262842;
+        --line-strong: #383c5e;
+        --brand: #8b8cff;
+        --brand-strong: #a7a6ff;
+        --brand-ink: #0f0e20;
+        --brand-soft: rgba(139, 140, 255, 0.18);
+        --brand-2: #5b9dff;
+        --ok: #46c187;
+        --danger: #f0776b;
+        --warn: #e0a53a;
+        --sidebar-bg: #0b0a1c;
+        --sidebar-edge: #1d1b3c;
+        --sidebar-ink: #d7d8ee;
+        --sidebar-ink-soft: #868aad;
+        --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+        --shadow-md: 0 8px 24px -10px rgba(0, 0, 0, 0.6);
+        --shadow-pop: 0 18px 44px -14px rgba(0, 0, 0, 0.72);
+      }
+
+      /* palettes (light) */
+      :root[data-palette] {
+        --brand-soft: color-mix(in srgb, var(--brand) 14%, var(--surface));
+        --sidebar-active-bg: color-mix(in srgb, var(--brand) 24%, transparent);
+        --sidebar-active-bar: var(--brand);
+        --glow-2: color-mix(in srgb, var(--brand) 7%, transparent);
+      }
+      :root[data-palette="gradebook"] {
+        --paper: #f6f7fb; --surface: #ffffff; --surface-2: #eef1f7; --surface-3: #e6eaf2;
+        --ink: #1b2233; --ink-soft: #56607a; --ink-faint: #646d82;
+        --line: #e4e8f0; --line-strong: #cfd6e4;
+        --brand: #4f46e5; --brand-strong: #4035c9; --brand-soft: #ecebfc;
+        --sidebar-bg: #171c2b; --sidebar-edge: #232a3d; --sidebar-ink: #d5dae7; --sidebar-ink-soft: #8b94ac;
+        --sidebar-active-bg: rgba(129,121,245,0.18); --sidebar-active-bar: #8179f5;
+        --glow-1: transparent; --glow-2: transparent; --glass-bg: var(--surface);
+      }
+      :root[data-palette="midnight"] {
+        --paper: #eef2fb; --surface: #ffffff; --surface-2: #e7edf9; --surface-3: #dbe5f6;
+        --ink: #152039; --ink-soft: #47567a; --ink-faint: #586790;
+        --line: #dae2f2; --line-strong: #c2cee6;
+        --brand: #2563eb; --brand-strong: #1d4ed8;
+        --sidebar-bg: #0e1730; --sidebar-edge: #1c2848;
+      }
+      :root[data-palette="ember"] {
+        --paper: #faf6f1; --surface: #fffdfb; --surface-2: #f3ece3; --surface-3: #ece2d6;
+        --ink: #2a2015; --ink-soft: #6c5d4c; --ink-faint: #7e6f5c;
+        --line: #ece1d4; --line-strong: #dacbb8;
+        --brand: #c2410c; --brand-strong: #9a3412;
+        --sidebar-bg: #1f1a15; --sidebar-edge: #332a20;
+      }
+      :root[data-palette="meadow"] {
+        --paper: #f2f8f4; --surface: #ffffff; --surface-2: #e8f2eb; --surface-3: #dbeae1;
+        --ink: #152420; --ink-soft: #4a6058; --ink-faint: #5c716a;
+        --line: #dbeae1; --line-strong: #c2dacd;
+        --brand: #047857; --brand-strong: #065f46;
+        --sidebar-bg: #0e241b; --sidebar-edge: #1a4030;
+      }
+
+      /* palettes (dark reclaim) */
+      :root[data-theme="dark"][data-palette="gradebook"] {
+        --paper: #0f131c; --surface: #171c28; --surface-2: #1e2432; --surface-3: #262d3d;
+        --ink: #e7ebf3; --ink-soft: #a6b0c4; --ink-faint: #7f8aa2;
+        --line: #283040; --line-strong: #384258;
+        --brand: #8b83f6; --brand-strong: #a49dff; --brand-soft: rgba(139,131,246,0.16);
+        --sidebar-bg: #10141e; --sidebar-edge: #1d2433; --sidebar-ink: #d5dae7; --sidebar-ink-soft: #828ca6;
+      }
+      :root[data-theme="dark"][data-palette="midnight"] {
+        --paper: #0a0f1e; --surface: #111a30; --surface-2: #172440; --surface-3: #212f52;
+        --ink: #e7ecfa; --ink-soft: #a6b3d2; --ink-faint: #8090b3;
+        --line: #243250; --line-strong: #334162;
+        --brand: #60a5fa; --brand-strong: #93c5fd;
+        --sidebar-bg: #080d1c; --sidebar-edge: #172340;
+      }
+      :root[data-theme="dark"][data-palette="ember"] {
+        --paper: #14100b; --surface: #1e1812; --surface-2: #29211a; --surface-3: #352b20;
+        --ink: #f1e9df; --ink-soft: #c4b5a2; --ink-faint: #9d8f7c;
+        --line: #33291f; --line-strong: #473a2b;
+        --brand: #fb923c; --brand-strong: #fdba74;
+        --sidebar-bg: #100c07; --sidebar-edge: #241d14;
+      }
+      :root[data-theme="dark"][data-palette="meadow"] {
+        --paper: #0a130f; --surface: #101c16; --surface-2: #16261e; --surface-3: #203328;
+        --ink: #e5f0ea; --ink-soft: #a5bdb1; --ink-faint: #7f988c;
+        --line: #1e3228; --line-strong: #2c4636;
+        --brand: #34d399; --brand-strong: #6ee7b7;
+        --sidebar-bg: #081109; --sidebar-edge: #163024;
+      }
+
+      /* PLACEHOLDER_STYLE */
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        color: var(--ink);
+        background:
+          radial-gradient(1200px 820px at 8% -12%, var(--glow-1), transparent 62%),
+          radial-gradient(1080px 760px at 96% -4%, var(--glow-2), transparent 58%),
+          var(--paper);
+        background-attachment: fixed;
+        transition: background-color var(--t) var(--ease), color var(--t) var(--ease);
+      }
+      .controls {
+        position: sticky; top: 0; z-index: 50;
+        display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem;
+        padding: 0.7rem 1.1rem;
+        background: var(--glass-bg);
+        -webkit-backdrop-filter: var(--glass-blur); backdrop-filter: var(--glass-blur);
+        border-bottom: 1px solid var(--glass-border);
+      }
+      .controls strong { font-size: 0.85rem; letter-spacing: 0.02em; }
+      .seg { display: inline-flex; border: 1px solid var(--line-strong); border-radius: 999px; overflow: hidden; }
+      .seg button {
+        border: 0; background: var(--surface); color: var(--ink-soft);
+        padding: 0.35rem 0.8rem; font: inherit; font-size: 0.82rem; cursor: pointer;
+        transition: background var(--t) var(--ease), color var(--t) var(--ease);
+      }
+      .seg button[aria-pressed="true"] { background: var(--brand); color: var(--brand-ink); }
+      .swatches { display: inline-flex; gap: 0.4rem; }
+      .swatch {
+        width: 1.5rem; height: 1.5rem; border-radius: 7px; cursor: pointer; padding: 0;
+        border: 2px solid transparent; outline: 1px solid var(--line-strong);
+      }
+      .swatch[aria-pressed="true"] { border-color: var(--ink); }
+      .shell {
+        display: grid; grid-template-columns: 250px minmax(0, 1fr);
+        min-height: calc(100vh - 3.2rem); max-width: 1180px; margin: 0 auto;
+      }
+      .sidebar {
+        display: flex; flex-direction: column; gap: 0.25rem;
+        padding: 1rem 0.75rem 1.5rem;
+        background: var(--sidebar-bg); border-right: 1px solid var(--sidebar-edge);
+        color: var(--sidebar-ink);
+      }
+      :root:not([data-palette="gradebook"]) .sidebar {
+        background:
+          radial-gradient(120% 52% at 50% -10%, color-mix(in srgb, var(--brand) 20%, transparent), transparent 68%),
+          var(--sidebar-bg);
+      }
+      .brand { display: flex; align-items: center; gap: 0.6rem; padding: 0.5rem 0.6rem 1rem; font-weight: 680; color: #fff; }
+      .brand-mark {
+        width: 1.6rem; height: 1.6rem; border-radius: 7px; flex: none;
+        background: linear-gradient(140deg, color-mix(in srgb, var(--brand) 65%, white), var(--brand) 70%);
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.14);
+      }
+      .nav-head { padding: 0.5rem 0.65rem 0.25rem; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; color: var(--sidebar-ink-soft); }
+      .nav-link { display: block; position: relative; padding: 0.5rem 0.7rem; border-radius: var(--radius-sm); color: var(--sidebar-ink); text-decoration: none; font-size: 0.94rem; }
+      .nav-link:hover { background: var(--sidebar-hover); color: #fff; }
+      .nav-link.active { background: var(--sidebar-active-bg); color: var(--sidebar-active-ink); font-weight: 600; }
+      .nav-link.active::before { content: ""; position: absolute; left: -0.75rem; top: 0.35rem; bottom: 0.35rem; width: 3px; border-radius: 0 3px 3px 0; background: var(--sidebar-active-bar); }
+      /* PLACEHOLDER_STYLE2 */
+      .main { min-width: 0; display: flex; flex-direction: column; }
+      .topbar {
+        position: sticky; top: 3.2rem; z-index: 20;
+        display: flex; align-items: center; gap: 0.75rem;
+        padding: 0.6rem 1.25rem; min-height: 3.5rem;
+        background: var(--glass-bg);
+        -webkit-backdrop-filter: var(--glass-blur); backdrop-filter: var(--glass-blur);
+        border-bottom: 1px solid var(--glass-border);
+      }
+      .topbar-title { font-weight: 620; margin-right: auto; }
+      .content { padding: 1.5rem 1.5rem 3rem; }
+      h1 { font-size: 1.5rem; letter-spacing: -0.01em; margin: 0 0 1rem; }
+      h2 { font-size: 1.05rem; margin: 1.75rem 0 0.75rem; }
+      .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 0.9rem; }
+      .stat-card, .param-card, .panel, .notice {
+        background: var(--glass-bg);
+        -webkit-backdrop-filter: var(--glass-blur); backdrop-filter: var(--glass-blur);
+        border: 1px solid var(--glass-border); border-radius: var(--radius); box-shadow: var(--shadow-sm);
+      }
+      .stat-card {
+        position: relative; padding: 0.95rem 1.05rem 1rem 1.15rem; overflow: hidden;
+        transition: transform var(--t) var(--ease), box-shadow var(--t) var(--ease), border-color var(--t) var(--ease);
+      }
+      .stat-card::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: linear-gradient(to bottom, var(--brand), color-mix(in srgb, var(--brand) 45%, transparent)); }
+      .stat-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); border-color: color-mix(in srgb, var(--brand) 30%, var(--line)); }
+      .stat-label { font-size: 0.78rem; font-weight: 600; letter-spacing: 0.02em; text-transform: uppercase; color: var(--ink-soft); }
+      .stat-value { margin-top: 0.15rem; font-size: 2rem; font-weight: 700; line-height: 1.1; letter-spacing: -0.025em; font-variant-numeric: tabular-nums; }
+      .hint { font-size: 0.82rem; color: var(--ink-faint); }
+      .param-card { padding: 1rem 1.1rem; transition: box-shadow var(--t) var(--ease), border-color var(--t) var(--ease); }
+      .param-card:hover { box-shadow: var(--shadow-md); border-color: color-mix(in srgb, var(--brand) 22%, var(--line)); }
+      .param-card h3 { margin: 0 0 0.25rem; }
+      .param-card h4 { margin: 0.85rem 0 0.3rem; font-size: 0.82rem; font-weight: 620; color: var(--ink-soft); }
+      .summary { color: var(--ink-soft); font-size: 0.9rem; }
+      .summary strong { color: var(--ink); }
+      .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 0.9rem; margin-top: 0.9rem; }
+      /* PLACEHOLDER_STYLE3 */
+      .row { display: flex; flex-wrap: wrap; gap: 0.6rem; align-items: center; }
+      button.btn {
+        font: inherit; font-weight: 560; color: var(--ink); background: var(--surface);
+        border: 1px solid var(--line-strong); border-radius: var(--radius-sm);
+        padding: 0.5rem 0.9rem; cursor: pointer;
+        transition: background var(--t) var(--ease), border-color var(--t) var(--ease), transform var(--t) var(--ease);
+      }
+      button.btn:hover { background: var(--surface-2); border-color: var(--brand); }
+      button.btn:active { transform: translateY(1px); }
+      button.btn.primary { color: var(--brand-ink); background: var(--brand); border-color: transparent; }
+      button.btn.primary:hover { background: var(--brand-strong); }
+      button.btn.danger { color: var(--danger); background: var(--surface); border-color: color-mix(in srgb, var(--danger) 45%, var(--line-strong)); }
+      button.btn.danger:hover { background: var(--danger-soft); }
+      button.btn.quiet { background: transparent; border-color: transparent; color: var(--ink-soft); }
+      button.btn.quiet:hover { background: var(--surface-2); color: var(--ink); }
+      input.field { font: inherit; color: var(--ink); background: var(--surface); border: 1px solid var(--line-strong); border-radius: var(--radius-sm); padding: 0.5rem 0.6rem; }
+      input.field:focus-visible { outline: none; border-color: var(--brand); box-shadow: 0 0 0 3px var(--brand-soft); }
+      .tabs { display: flex; gap: 0.25rem; border-bottom: 1px solid var(--line); margin: 0.5rem 0 1rem; }
+      .tab { border: 0; background: transparent; padding: 0.5rem 0.8rem; font: inherit; color: var(--ink-soft); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; }
+      .tab.active { color: var(--brand); border-bottom-color: var(--brand); font-weight: 600; }
+      .notice { border-color: var(--brand); border-left-width: 3px; padding: 0.85rem 1rem; margin: 1rem 0; }
+      .pill { display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.15rem 0.6rem; border-radius: 999px; font-size: 0.78rem; font-weight: 600; }
+      .pill.ok { color: var(--ok); background: var(--ok-soft); }
+      .pill.warn { color: var(--warn); background: var(--warn-soft); }
+      .pill.danger { color: var(--danger); background: var(--danger-soft); }
+      .chart { width: 100%; height: 150px; }
+      .grid-line { stroke: color-mix(in srgb, var(--ink) 12%, transparent); stroke-dasharray: 3 3; }
+      .area-curve { fill: none; stroke: var(--brand); stroke-width: 2; }
+      .area-dot { fill: var(--brand); stroke: var(--surface); stroke-width: 1.5; }
+      .axis { fill: var(--ink-faint); font-size: 11px; }
+      .auth-wrap { display: grid; place-items: center; padding: 1.5rem; }
+      .auth-card { width: 100%; max-width: 360px; padding: 2rem; background: var(--glass-bg); -webkit-backdrop-filter: var(--glass-blur); backdrop-filter: var(--glass-blur); border: 1px solid var(--glass-border); border-radius: calc(var(--radius) + 4px); box-shadow: var(--shadow-pop); }
+      .auth-brand { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 1.25rem; font-weight: 680; }
+      .auth-title { margin: 0 0 0.35rem; font-size: 1.4rem; }
+      .auth-sub { margin: 0 0 1.5rem; color: var(--ink-soft); font-size: 0.92rem; }
+      .stack { display: flex; flex-direction: column; gap: 0.75rem; }
+      .stack label { display: flex; flex-direction: column; gap: 0.3rem; font-size: 0.9rem; color: var(--ink-soft); }
+      section.demo { margin-top: 2rem; }
+      /* entrance motion (replayed via .replay class toggle) */
+      @keyframes card-rise { from { opacity: 0; transform: translateY(10px); } }
+      .replay .stat-card { animation: card-rise 300ms var(--ease) backwards; }
+      .replay .stat-card:nth-child(1) { animation-delay: 40ms; }
+      .replay .stat-card:nth-child(2) { animation-delay: 90ms; }
+      .replay .stat-card:nth-child(3) { animation-delay: 140ms; }
+      .replay .stat-card:nth-child(4) { animation-delay: 190ms; }
+      @media (prefers-reduced-motion: reduce) { * { animation-duration: 0.01ms !important; animation-delay: 0s !important; transition-duration: 0.01ms !important; } }
+    </style>
+  </head>
+  <body>
+    <div class="controls">
+      <strong>Aurora preview</strong>
+      <span class="seg" id="theme">
+        <button data-theme-val="light" aria-pressed="true">Light</button>
+        <button data-theme-val="dark" aria-pressed="false">Dark</button>
+      </span>
+      <span class="swatches" id="palette">
+        <button class="swatch" data-pal="" aria-pressed="true" title="Aurora (default)" style="background:#5850ec"></button>
+        <button class="swatch" data-pal="gradebook" aria-pressed="false" title="Gradebook" style="background:#4f46e5"></button>
+        <button class="swatch" data-pal="midnight" aria-pressed="false" title="Midnight" style="background:#2563eb"></button>
+        <button class="swatch" data-pal="ember" aria-pressed="false" title="Ember" style="background:#c2410c"></button>
+        <button class="swatch" data-pal="meadow" aria-pressed="false" title="Meadow" style="background:#047857"></button>
+      </span>
+      <button class="btn quiet" id="replayBtn" type="button">Replay motion</button>
+    </div>
+
+    <div class="shell">
+      <aside class="sidebar">
+        <div class="brand"><span class="brand-mark"></span><span>Student Panel</span></div>
+        <div class="nav-head">Overview</div>
+        <a class="nav-link active" href="#">Dashboard</a>
+        <a class="nav-link" href="#">Students</a>
+        <div class="nav-head">Assess</div>
+        <a class="nav-link" href="#">Evaluate</a>
+        <a class="nav-link" href="#">Parameters</a>
+        <a class="nav-link" href="#">Results</a>
+        <div class="nav-head">Admin</div>
+        <a class="nav-link" href="#">Users</a>
+        <a class="nav-link" href="#">Roles</a>
+      </aside>
+
+      <div class="main">
+        <header class="topbar">
+          <span class="topbar-title">Dashboard</span>
+          <span class="pill ok">● Online</span>
+        </header>
+        <div class="content" id="content">
+          <h1>Dashboard</h1>
+          <div class="stat-grid">
+            <div class="stat-card"><div class="stat-label">Students</div><div class="stat-value">128</div><div class="hint">6 parameters in use</div></div>
+            <div class="stat-card"><div class="stat-label">Scores entered</div><div class="stat-value">82%</div><div class="hint">631 of 768</div></div>
+            <div class="stat-card"><div class="stat-label">Fully measured</div><div class="stat-value">97</div><div class="hint">of 128 students</div></div>
+            <div class="stat-card"><div class="stat-label">Not measured</div><div class="stat-value">14</div><div class="hint">17 partly measured</div></div>
+          </div>
+          <!-- PLACEHOLDER_BODY2 -->
+          <h2>Parameters</h2>
+          <div class="grid-2">
+            <article class="param-card">
+              <h3>Class participation</h3>
+              <p class="summary">Average <strong>7.8</strong> · Lowest 4 · Highest 10 · 124 measured · <strong>+0.4</strong> vs previous period</p>
+              <h4>Class average over time</h4>
+              <svg class="chart" viewBox="0 0 300 150" preserveAspectRatio="none" aria-hidden="true">
+                <defs>
+                  <linearGradient id="grad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" style="stop-color: var(--brand); stop-opacity: 0.26" />
+                    <stop offset="100%" style="stop-color: var(--brand); stop-opacity: 0" />
+                  </linearGradient>
+                </defs>
+                <line class="grid-line" x1="0" y1="40" x2="300" y2="40" />
+                <line class="grid-line" x1="0" y1="80" x2="300" y2="80" />
+                <line class="grid-line" x1="0" y1="120" x2="300" y2="120" />
+                <path fill="url(#grad)" d="M20,110 L72,90 L124,95 L176,70 L228,60 L280,45 L280,130 L20,130 Z" />
+                <path class="area-curve" d="M20,110 L72,90 L124,95 L176,70 L228,60 L280,45" />
+                <g>
+                  <circle class="area-dot" cx="20" cy="110" r="3" />
+                  <circle class="area-dot" cx="72" cy="90" r="3" />
+                  <circle class="area-dot" cx="124" cy="95" r="3" />
+                  <circle class="area-dot" cx="176" cy="70" r="3" />
+                  <circle class="area-dot" cx="228" cy="60" r="3" />
+                  <circle class="area-dot" cx="280" cy="45" r="3" />
+                </g>
+              </svg>
+            </article>
+            <article class="param-card">
+              <h3>Homework quality</h3>
+              <p class="summary">Average <strong>8.3</strong> · Lowest 5 · Highest 10 · 120 measured</p>
+              <h4>How scores are spread</h4>
+              <svg class="chart" viewBox="0 0 300 150" preserveAspectRatio="none" aria-hidden="true">
+                <line class="grid-line" x1="0" y1="40" x2="300" y2="40" />
+                <line class="grid-line" x1="0" y1="80" x2="300" y2="80" />
+                <line class="grid-line" x1="0" y1="120" x2="300" y2="120" />
+                <g fill="var(--brand)">
+                  <rect x="24" y="100" width="34" height="30" rx="4" />
+                  <rect x="76" y="70" width="34" height="60" rx="4" />
+                  <rect x="128" y="40" width="34" height="90" rx="4" />
+                  <rect x="180" y="55" width="34" height="75" rx="4" />
+                  <rect x="232" y="85" width="34" height="45" rx="4" />
+                </g>
+              </svg>
+            </article>
+          </div>
+
+          <section class="demo">
+            <h2>Components</h2>
+            <div class="tabs">
+              <button class="tab active">Overview</button>
+              <button class="tab">By period</button>
+              <button class="tab">By parameter</button>
+            </div>
+            <div class="row">
+              <button class="btn primary">Save scores</button>
+              <button class="btn">Cancel</button>
+              <button class="btn danger">Delete</button>
+              <button class="btn quiet">Reset</button>
+              <input class="field" placeholder="Search students…" />
+            </div>
+            <div class="row" style="margin-top:0.75rem">
+              <span class="pill ok">On track</span>
+              <span class="pill warn">Needs review</span>
+              <span class="pill danger">Missing</span>
+            </div>
+            <div class="notice"><strong>Heads up.</strong> Period 4 closes on Friday — scores lock at midnight.</div>
+          </section>
+
+          <section class="demo">
+            <h2>Sign-in screen</h2>
+            <div class="auth-wrap">
+              <div class="auth-card">
+                <div class="auth-brand"><span class="brand-mark"></span><span>Student Panel</span></div>
+                <h1 class="auth-title">Welcome back</h1>
+                <p class="auth-sub">Sign in to continue to your panel.</p>
+                <div class="stack">
+                  <label>Username<input class="field" value="teacher" /></label>
+                  <label>Password<input class="field" type="password" value="password" /></label>
+                  <button class="btn primary">Sign in</button>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+    <script>
+      const root = document.documentElement;
+      const content = document.getElementById("content");
+
+      function replay() {
+        content.classList.remove("replay");
+        void content.offsetWidth; // reflow so the animation restarts
+        content.classList.add("replay");
+      }
+
+      document.getElementById("theme").addEventListener("click", (e) => {
+        const btn = e.target.closest("button[data-theme-val]");
+        if (!btn) return;
+        root.setAttribute("data-theme", btn.dataset.themeVal);
+        for (const b of e.currentTarget.children)
+          b.setAttribute("aria-pressed", String(b === btn));
+      });
+
+      document.getElementById("palette").addEventListener("click", (e) => {
+        const btn = e.target.closest("button[data-pal]");
+        if (!btn) return;
+        if (btn.dataset.pal) root.setAttribute("data-palette", btn.dataset.pal);
+        else root.removeAttribute("data-palette");
+        for (const b of e.currentTarget.children)
+          b.setAttribute("aria-pressed", String(b === btn));
+      });
+
+      document.getElementById("replayBtn").addEventListener("click", replay);
+      replay();
+    </script>
+  </body>
+</html>
